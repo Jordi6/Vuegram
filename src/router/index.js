@@ -1,30 +1,42 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import VueRouter, { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
+import { auth } from '../firebase'
+import { CreateRouter, CreateWebHistory } from 'vue-router'
 
-Vue.useContext(VueRouter)
+
 
 const routes = [
   {
+    // home will be dashboard
     path: '/',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ "../views/Login.vue")
+    component: () => import(/* webpackChunkName: "settings" */ "../views/Login.vue"),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/settings',
-    name: 'Settings',
-    component: () => import(/* webpackChunkName: "settings" */ "../views/Settings.vue")
-  },
+    name: 'settings',
+    component: () => import(/* webpackChunkName: "settings" */ "../views/Settings.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  }
 ]
 
-const router = new VueRouter({
+const router = new createRouter({
+  history: createWebHistory(),
   mode: 'history', 
-  base: process.env.BASE_URL,
   routes
 })
 

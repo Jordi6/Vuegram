@@ -1,15 +1,13 @@
 <template>
   <div>
-
+    <span>Dashboard</span>
   </div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
 
 <style lang="scss">
-
+  span {
+    color: red;
+    size: 50px;
+  }
 </style>
