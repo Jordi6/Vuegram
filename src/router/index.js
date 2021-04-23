@@ -20,9 +20,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: "settings" */ "../views/Login.vue"),
-    meta: {
-      requiresAuth: true
-    }
   },
   {
     path: '/settings',
@@ -38,6 +35,17 @@ const router = new createRouter({
   history: createWebHistory(),
   mode: 'history', 
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+
+  // if the route has requiresAuth property set to true and the user is not loggin in, redirect them to login view, vue ;)
+  if (requiresAuth && !auth.currentUser) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router
