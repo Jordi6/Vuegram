@@ -1,3 +1,3 @@
-# vuegram
+# Vuegram
 
-fullstack web-app wrote in vue
+fullstack web-app wirtten in vue
