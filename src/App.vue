@@ -1,10 +1,7 @@
 <template>
   <div id="app">
-     <router-link to="/">Home</router-link>
-     <br>
-     <router-link to="/login">Login</router-link>
+      <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <script>

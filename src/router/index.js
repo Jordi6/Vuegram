@@ -27,7 +27,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "settings" */ "../views/Settings.vue"),
     meta: {
       requiresAuth: true
-    }
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404 Not Found',
+    // redirect to 404, add a 404 component
+    component: () => import(/* webpackChunkName: "settings" */ "../views/Settings.vue"),
   }
 ]
 
