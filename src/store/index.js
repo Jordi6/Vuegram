@@ -14,6 +14,10 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    // sign user out
+    async logout({ dispatch }, user ) {
+      fb.auth.signOut()
+    },
     async login({ dispatch }, form) {
       // sign user in
       const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password)
