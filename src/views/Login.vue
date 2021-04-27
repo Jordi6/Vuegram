@@ -5,7 +5,7 @@
                 <h1>Vuegram</h1>
                 <p>Welcome to the <a href="https://www.jordibecerril.com/" target="_blank">Jordi B.E.</a> social media web app project, written in Vue.js and Firebase.</p>
             </div>
-            <div class="col2">
+            <div :class="{ 'signup-form': !showLoginForm }" class="col2">
                 <form v-if="showLoginForm" @submit.prevent>
                     <h1>Welcome Back</h1>
                     <div>
@@ -17,7 +17,7 @@
                         <input v-model.trim="loginForm.password" type="password" placeholder="******" id="password1" />
                     </div>
                     <button @click="login()" class="button">Log in</button>
-                    <div class="extras">
+                    <div class="extras">    
                         <a>Forgot Password</a>
                         <a @click="toggleForm()">Create an Account</a>
                     </div>
