@@ -49,7 +49,7 @@ const store = new createStore({
         user = data.user;
         //for testing console.log("user1: " + userId + " user2: " + user.uid);
         
-        // create user profile object in userCollections
+        // create user profile object in userCollection
         fb.userCollection.doc(userId).set({
           name: form.name,
           title: form.title
