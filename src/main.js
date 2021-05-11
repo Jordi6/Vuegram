@@ -11,7 +11,7 @@ import "./assets/SCSS/app.scss";
 
 let app
 
-auth.onAuthStateChanged(() => {
+auth.onAuthStateChanged((user) => {
   if (!app) {
     app = createApp(App)
     app.use(store).use(router).mount('#app')

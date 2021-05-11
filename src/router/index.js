@@ -5,7 +5,6 @@ import { auth } from '../firebase'
 import { CreateRouter, CreateWebHistory } from 'vue-router'
 
 
-
 const routes = [
   {
     // home will be dashboard
@@ -43,6 +42,7 @@ const router = new createRouter({
   routes
 })
 
+
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
 
@@ -53,5 +53,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+
 
 export default router

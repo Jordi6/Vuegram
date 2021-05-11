@@ -22,24 +22,33 @@ const store = new createStore({
     },
     async login({ dispatch }, form) {
       // sign user in
-      const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password)
-        .then(data => console.log(data))
-        .catch(err => alert(err.message))
-
+      var user = {};
+      await fb.auth.signInWithEmailAndPassword(form.email, form.password)
+        .then((data) => {
+          user = data.user
+          console.log(data)
+        })
+        .catch((err) => {
+          alert(err.message)
+        });
       // fetch user profile and set in state
       dispatch('fetchUserProfile', user)
     },
     async fetchUserProfile({ commit }, user) {
       // fetch user profile
-      const userProfile = await fb.userCollection.doc(user.uid).get()
-
+      const userRef = fb.userCollection.doc(user.uid);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        console.log('Document data:', doc.data());
+      }
       // set user profile in state
-      commit('setUserProfile', userProfile.data())
+      commit('setUserProfile', doc.data())
 
       // change route to dashboard
       router.push('/')
     },
-
     async signup({ dispatch }, form) {
       var user = {};
       await fb.auth.createUserWithEmailAndPassword(form.email, form.password)
@@ -49,7 +58,7 @@ const store = new createStore({
         user = data.user;
         //for testing console.log("user1: " + userId + " user2: " + user.uid);
         
-        // create user profile object in userCollection
+        // create user profile object in userCollections
         fb.userCollection.doc(userId).set({
           name: form.name,
           title: form.title
@@ -61,11 +70,9 @@ const store = new createStore({
           // ...
           alert(error);
         });
-        router.push('/')
-
+        // fetch user profile and set in state
+        dispatch('fetchUserProfile', user)
     }
-
-
   }
 })
 
