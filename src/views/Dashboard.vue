@@ -1,7 +1,7 @@
 <template>
   <div>
     <span>Dashboard</span>
-    <button @click="logout()" type="button" class="btn btn-outline-primary">
+    <button @click="logout()" class="btn btn-outline-primary">
       Sign out
     </button>
   </div>
@@ -12,7 +12,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logout", {
-        
+
       });
     },
   },
