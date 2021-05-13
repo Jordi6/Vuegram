@@ -16,7 +16,7 @@ const store = new createStore({
   },
   actions: {
     // sign user out
-    async logout({ dispatch }, user ) {
+    async logout() {
       fb.auth.signOut()
       router.push('/login')
     },
