@@ -10,6 +10,11 @@
 import router from '../router/index'
 
 export default {
+  data() { 
+    return {
+      show: false,
+    }
+  },
   methods: {
     goHome() {
       router.push('/')
@@ -19,8 +24,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   div {
     padding: 1em;
   }
+  
 </style>
