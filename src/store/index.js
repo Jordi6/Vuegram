@@ -72,8 +72,8 @@ const store = new createStore({
       commit("setUserProfile", doc.data());
 
       // change route to dashboard
-      if (router.currentRoute.path == "/login") {
-        router.push("/");
+      if (router.currentRoute.value.path == "/login") {
+        router.push('/');
       }
     },
     async signup({ dispatch }, form) {
