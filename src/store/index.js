@@ -4,14 +4,36 @@ import * as fb from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import router from "../router/index";
 
+
+
+// realtime firebase connection
+fb.postCollection.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+  let postsArray = []
+
+  snapshot.forEach(doc => {
+    let post = doc.data()
+    post.id = doc.id
+
+    postsArray.push(post)
+  })
+
+  store.commit('setPosts', postsArray)
+})
+
+
+
 const store = new createStore({
   state: {
     userProfile: {},
+    posts: []
   },
   mutations: {
     setUserProfile(state, val) {
       state.userProfile = val;
     },
+    setPosts(state, val) {
+      state.posts = val
+    }
   },
   actions: {
     // sign user out
@@ -79,7 +101,17 @@ const store = new createStore({
       // fetch user profile and set in state
       dispatch("fetchUserProfile", user);
     },
+    async createPost({ state, commit }, post) {
+      await fb.postCollection.add({
+        createdOn: new Date(),
+        content: post.content,
+        userId: fb.auth.currentUser.uid,
+        userName: state.userProfile.name,
+        comments: 0,
+        liked: 0
+      })
+    }
   },
 });
 
-export default store;
+export default store
