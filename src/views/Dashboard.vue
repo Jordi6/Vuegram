@@ -1,6 +1,9 @@
 <template>
   <div id="dashboard">
     <section>
+      <transition name="fade">
+        <v-modal v-model="show"></v-modal>
+      </transition>
       <div class="col1">
         <div class="profile">
           <h5>{{ userProfile.name }}</h5>
@@ -28,10 +31,12 @@
             <p>{{ trimLength(post.content) }}</p>
             <ul>
               <li>
-                <a>comments {{ post.comments }}</a>
+                <a @click="toggelCommentModal(post)"
+                  >comments {{ post.comments }}</a
+                >
               </li>
               <li>
-                <a>likes {{ post.likes }}</a>
+                <a @click="likePost(post.id, post.likes)">likes {{ post.likes }}</a>
               </li>
               <li><a>view full post</a></li>
             </ul>
@@ -47,7 +52,8 @@
 
 <script>
 import { mapState } from "vuex";
-import moment from 'moment'
+import moment from "moment";
+import CommentModal from "@/components/CommentModal";
 
 export default {
   data() {
@@ -55,10 +61,12 @@ export default {
       post: {
         content: "",
       },
+      show: false,
+      selectedPost: {},
     };
   },
   computed: {
-    ...mapState(["userProfile", "posts"])
+    ...mapState(["userProfile", "posts"]),
   },
   methods: {
     createPost() {
@@ -66,10 +74,12 @@ export default {
       this.post.content = "";
     },
     formatDate(val) {
-      if (!val) { return '-'}
+      if (!val) {
+        return "-";
+      }
 
-      let date = val.toDate()
-      return moment(date).fromNow()
+      let date = val.toDate();
+      return moment(date).fromNow();
     },
     trimLength(val) {
       if (val.length < 200) {
@@ -77,6 +87,24 @@ export default {
       }
       return `${val.substring(0, 200)}...`;
     },
+    toggelCommentModal(post) {
+      this.$vfm.show({
+        component: CommentModal,
+        bind: {
+          name: "CommentModal",
+          post: post,
+        },
+      });
+      // if opening modal set selectedPost, else clear
+      if (this.show) {
+        this.selectedPost = post;
+      } else {
+        this.selectedPost = {};
+      }
+    },
+    likePost(id, likesCount) {
+      this.$store.dispatch('likePost', { id, likesCount })
+    }
   },
 };
 </script>

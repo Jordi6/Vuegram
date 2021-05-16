@@ -7,7 +7,7 @@ import router from "../router/index";
 
 
 // realtime firebase connection
-fb.postCollection.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+fb.postsCollection.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
   let postsArray = []
 
   snapshot.forEach(doc => {
@@ -102,13 +102,32 @@ const store = new createStore({
       dispatch("fetchUserProfile", user);
     },
     async createPost({ state, commit }, post) {
-      await fb.postCollection.add({
+      await fb.postsCollection.add({
         createdOn: new Date(),
         content: post.content,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
         comments: 0,
-        liked: 0
+        likes: 0
+      })
+    },
+    async likePost({ commit }, post) {
+      const userId = fb.auth.currentUser.uid
+      const docId = `${userId}_${post.id}`
+
+      // check if user has liked post
+      const doc = await fb.likesCollection.doc(docId).get()
+      if (doc.exists) { return }
+
+      // create post
+      await fb.likesCollection.doc(docId).set({
+        postId: post.id,
+        userId: userId
+      })
+
+      // update post likes count
+      fb.postsCollection.doc(post.id).update({
+        likes: post.likesCount + 1
       })
     }
   },
