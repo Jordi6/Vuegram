@@ -51,7 +51,6 @@ const store = new createStore({
         .signInWithEmailAndPassword(form.email, form.password)
         .then((data) => {
           user = data.user;
-          console.log(data);
         })
         .catch((err) => {
           alert(err.message);
@@ -63,11 +62,7 @@ const store = new createStore({
       // fetch user profile
       const userRef = fb.userCollection.doc(user.uid);
       const doc = await userRef.get();
-      if (!doc.exists) {
-        console.log("No such document!");
-      } else {
-        console.log("Document data:", doc.data());
-      }
+     
       // set user profile in state
       commit("setUserProfile", doc.data());
 
@@ -84,7 +79,6 @@ const store = new createStore({
           // signed in
           const userId = data.user.uid;
           user = data.user;
-          //for testing console.log("user1: " + userId + " user2: " + user.uid);
 
           // create user profile object in userCollections
           fb.userCollection.doc(userId).set({
@@ -128,6 +122,32 @@ const store = new createStore({
       // update post likes count
       fb.postsCollection.doc(post.id).update({
         likes: post.likesCount + 1
+      })
+    },
+    async updateProfile({dispatch}, user) {
+      const userId = fb.auth.currentUser.uid
+      // update user object
+      const userRef = await fb.userCollection.doc(userId).update({
+        name: user.name,
+        title: user.title
+      })
+
+      dispatch('fetchUserProfile', { uid: userId })
+
+      // update all posts by user 
+      const postDocs = await fb.postsCollection.where('userId', '==', userId).get()
+      postDocs.forEach(doc => {
+        fb.postsCollection.doc(doc.id).update({
+          userName: user.name
+        })
+      })
+
+      // update all coments by user 
+      const commentDocs = await fb.commentsCollection.where('userId', '==', userId).get()
+      commentDocs.forEach(doc => {
+        fb.commentsCollection.doc(doc.id).update({
+          userName: user.name
+        })
       })
     }
   },
