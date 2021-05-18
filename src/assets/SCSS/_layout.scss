@@ -274,8 +274,13 @@ header {
       text-align: center;
       padding: 100px 1rem;
     }
-  
-    .c-modal {
+   
+  }
+
+
+
+// full post modal
+ .p-modal {
       position: fixed;
       top: 0;
       right: 0;
@@ -283,37 +288,7 @@ header {
       left: 0;
       background: rgba($dark, 0.4);
       z-index: 999;
-  
-      .c-container {
-        position: relative;
-        max-width: 600px;
-        margin: 30vh auto 0;
-        padding: 2rem;
-        border-radius: 3px;
-        background: $white;
-        box-shadow: 0 0 20px 0 rgba($dark, 0.5);
-  
-        a {
-          position: absolute;
-          top: 5px;
-          right: 10px;
-          padding: 5px;
-        }
-  
-        .button {
-          margin-top: 1rem;
-        }
-      }
-    }
-  
-    .p-modal {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background: rgba($dark, 0.4);
-      z-index: 999;
+
   
       .p-container {
         position: fixed;
@@ -328,6 +303,35 @@ header {
         background: $white;
         box-shadow: 0 0 20px 0 rgba($dark, 0.5);
         overflow: auto;
+
+
+        h5 {
+          margin: 0 0 0.5rem;
+        }
+        
+        span {
+          display: block;
+          font-style: italic;
+          font-size: 12px;
+          margin-bottom: 0.5rem;
+          color: darken($light, 20%);
+        }
+
+        p {
+          margin: 0;
+        }
+
+        ul {
+          list-style: none;
+          margin: 1rem 0 0;
+          padding: 0;
+    
+          li {
+            display: inline-block;
+            margin-right: 1rem;
+            font-size: 12px;
+          }
+        }
   
         .close {
           position: absolute;
@@ -339,10 +343,7 @@ header {
         .post {
           border: 0;
           border-bottom: 1px solid #e6ecf0;
-  
-          &:hover {
-            background: $white;
-          }
+          padding: 24px;
         }
   
         .comment {
@@ -354,25 +355,12 @@ header {
             border-top: 0;
           }
   
-          h5 {
-            margin: 0 0 0.5rem;
-          }
-  
-          span {
-            display: block;
-            font-style: italic;
-            font-size: 12px;
-            margin-bottom: 0.5rem;
-            color: darken($light, 20%);
-          }
-  
-          p {
-            margin: 0;
-          }
         }
       }
     }
-  }
+  
+
+    
   
   // settings
   #settings {

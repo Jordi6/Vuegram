@@ -33,13 +33,13 @@ export default {
         // create comment
       await commentsCollection.add({
         createdOn: new Date(),
-        conent: this.comment,
+        content: this.comment,
         postId: this.post.id,
         userId: auth.currentUser.uid,
         userName: this.$store.state.userProfile.name,
       });
         
-    //   update comment count on post
+    //  update comment count on post
       await postsCollection.doc(this.post.id).update({
           comments: parseInt(this.post.comments) + 1
       })

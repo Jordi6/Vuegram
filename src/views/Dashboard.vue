@@ -38,7 +38,7 @@
               <li>
                 <a @click="likePost(post.id, post.likes)">likes {{ post.likes }}</a>
               </li>
-              <li><a>view full post</a></li>
+              <li><a @click="viewPost(post)">view full post</a></li>
             </ul>
           </div>
         </div>
@@ -47,6 +47,11 @@
         </div>
       </div>
     </section>
+
+  <!-- full post modal -->
+  <transition name="fade">
+    <v-modal v-model="show1"></v-modal>
+  </transition>
   </div>
 </template>
 
@@ -54,6 +59,8 @@
 import { mapState } from "vuex";
 import moment from "moment";
 import CommentModal from "@/components/CommentModal";
+import FullPostModal from '@/components/FullPostModal'
+import { commentsCollection } from '../firebase';
 
 export default {
   data() {
@@ -62,7 +69,11 @@ export default {
         content: "",
       },
       show: false,
+      show1: true,
+      showPostModal: false,
       selectedPost: {},
+      fullPost: {}, 
+      postComments: []
     };
   },
   computed: {
@@ -104,7 +115,17 @@ export default {
     },
     likePost(id, likesCount) {
       this.$store.dispatch('likePost', { id, likesCount })
-    }
+    },
+    viewPost(post) {
+      // open full post modal
+      this.$vfm.show({
+        component: FullPostModal,
+        bind: {
+          name: "FullPostModal",
+          post: post,
+        },
+      });
+    },
   },
 };
 </script>
