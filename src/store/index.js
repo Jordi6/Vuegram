@@ -40,12 +40,11 @@ const store = new createStore({
     async logout({ commit }) {
       await fb.auth.signOut();
 
-      // clear userProfile and redirect to /login
       commit("setUserProfile", {});
       router.push("/login");
     },
+    // sign user out
     async login({ dispatch }, form) {
-      // sign user in
       var user = {};
       await fb.auth
         .signInWithEmailAndPassword(form.email, form.password)
@@ -55,18 +54,15 @@ const store = new createStore({
         .catch((err) => {
           alert(err.message);
         });
-      // fetch user profile and set in state
       dispatch("fetchUserProfile", user);
     },
+    // fetch user profile and set in state
     async fetchUserProfile({ commit }, user) {
-      // fetch user profile
       const userRef = fb.userCollection.doc(user.uid);
       const doc = await userRef.get();
      
-      // set user profile in state
       commit("setUserProfile", doc.data());
 
-      // change route to dashboard
       if (router.currentRoute.value.path == "/login") {
         router.push('/');
       }
@@ -89,10 +85,9 @@ const store = new createStore({
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          // ...
-          alert(error);
+        
+          alert(errorCode + ", " + errorMessage);
         });
-      // fetch user profile and set in state
       dispatch("fetchUserProfile", user);
     },
     async createPost({ state, commit }, post) {

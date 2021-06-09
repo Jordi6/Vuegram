@@ -4,7 +4,6 @@ import 'firebase/firestore'
 
 
 // Your web app's Firebase configuration
-// firebase init - add your own config here
 const firebaseConfig = {
     apiKey: "#",
     authDomain: "#",
@@ -15,9 +14,8 @@ const firebaseConfig = {
     measurementId: "#"
   }
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig)
-//firebase.analytics()
 
 // utils
 const db = firebase.firestore()

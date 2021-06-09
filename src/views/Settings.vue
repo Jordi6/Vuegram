@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     updateProfile() {
-      // logic goes here
       this.$store.dispatch('updateProfile', {
         name: this.name !== '' ? this.name : this.userProfile.name,
         title: this.title !== '' ? this.title : this.userProfile.title

@@ -60,7 +60,6 @@ import { mapState } from "vuex";
 import moment from "moment";
 import CommentModal from "@/components/CommentModal";
 import FullPostModal from '@/components/FullPostModal'
-import { commentsCollection } from '../firebase';
 
 export default {
   data() {
@@ -106,7 +105,6 @@ export default {
           post: post,
         },
       });
-      // if opening modal set selectedPost, else clear
       if (this.show) {
         this.selectedPost = post;
       } else {
@@ -117,7 +115,6 @@ export default {
       this.$store.dispatch('likePost', { id, likesCount })
     },
     viewPost(post) {
-      // open full post modal
       this.$vfm.show({
         component: FullPostModal,
         bind: {
