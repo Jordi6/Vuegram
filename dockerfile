@@ -21,7 +21,10 @@ RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
+<<<<<<< HEAD
 
+=======
+>>>>>>> ef33c87a23bda866b774fab771d7d8f78c61278d
 RUN mkdir /app
 
 COPY --from=build-stage /app/dist /app
