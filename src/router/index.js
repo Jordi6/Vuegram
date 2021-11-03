@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter, { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import { auth } from '../firebase'
-import { CreateRouter, CreateWebHistory } from 'vue-router'
 
 
 const routes = [
@@ -39,6 +38,9 @@ const router = new createRouter({
   mode: 'history', 
   routes
 })
+
+
+
 
 
 router.beforeEach((to, from, next) => {

@@ -38,6 +38,11 @@
             <a @click="dynamic()">Forgot Password</a>
             <a @click="toggleForm()">Create an Account</a>
           </div>
+          <br />
+          <br />
+          <button @click="loginWithGoogle()" class="button">
+            Log in with Google
+          </button>
         </form>
         <form v-else @submit.prevent>
           <h1>Get Started</h1>
@@ -108,6 +113,11 @@ export default {
     };
   },
   methods: {
+    loginWithGoogle() {
+      // call signInWithPopup in store. or index.js
+      this.$store.dispatch("signInWithGoogle")
+
+    },
     login() {
       this.$store.dispatch("login", {
         email: this.loginForm.email,
