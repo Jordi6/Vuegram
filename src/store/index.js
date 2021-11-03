@@ -1,4 +1,3 @@
-import { createApp } from "vue";
 import { createStore } from "vuex";
 import * as fb from "../firebase";
 import { doc, setDoc } from "firebase/firestore";

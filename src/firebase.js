@@ -6,7 +6,7 @@ import 'firebase/firestore'
 // Your web app's Firebase configuration
 // firebase init - add your own config here
 const firebaseConfig = {
-    apiKey: "AIzaSyBlsQ5HjUylhVWXyWwwLg55TyyNqoTSU4g",
+    apiKey: "AIzaSyDi-QvgQCd8QdF9wbnMuvV-V6H35sBDGKU",
     authDomain: "vuegram-c469c.firebaseapp.com",
     projectId: "vuegram-c469c",
     storageBucket: "vuegram-c469c.appspot.com",
