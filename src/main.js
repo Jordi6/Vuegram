@@ -6,15 +6,17 @@ import { auth } from "./firebase";
 import "./assets/SCSS/app.scss";
 import VueFinalModal from 'vue-final-modal'
 
-import 'vuetify/styles' // Global CSS has to be imported
-import { createVuetify } from 'vuetify'
 
+import { createVuetify } from 'vuetify'
+// import 'vuetify/styles' // Global CSS has to be imported
+// import * as components from 'vuetify/components'
+// import * as directives from 'vuetify/directives'
 
 
 let app
 const vuetify = createVuetify({
-  components,
-  directives
+  // components,
+  // directives
 })
 
   auth.onAuthStateChanged((user) => {
