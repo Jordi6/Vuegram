@@ -17,18 +17,25 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 
 library.add(fas, far)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a16b57 (image file chosen, previewed and uploaded to the cloud (firestore))
 
 let app
 
   auth.onAuthStateChanged((user) => {
     if (!app) {
       app = createApp(App)
+<<<<<<< HEAD
       app
       .component("font-awesome-icon", FontAwesomeIcon)
       .use(store)
       .use(router)
       .use(VueFinalModal(), {
+=======
+      app.use(store).use(router).use(VueFinalModal(), {
+>>>>>>> 9a16b57 (image file chosen, previewed and uploaded to the cloud (firestore))
         componentName: 'VueFinalModal',
         key: '$vfm',    
         dynamicContainerName: 'ModalsContainer'
