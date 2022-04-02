@@ -1,9 +1,5 @@
 
 
-// webpack.config.js
-const { VuetifyLoaderPlugin } = require('vuetify-loader')
-
-
 module.exports = {
     devServer: {
         // other config
