@@ -76,6 +76,7 @@ export default {
       this.$refs.input1.click();
     },
     preivewImage(event) {
+      // (this.uploadvalue) think of this as the const progress
       this.uploadvalue = 0;
       this.img1 = null;
       this.imageData = event.target.files[0];

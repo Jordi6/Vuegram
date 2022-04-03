@@ -8,6 +8,9 @@
           </button>
           <h5>{{ fullPost.userName }}</h5>
           <span>{{ formatDate(fullPost.createdOn) }}</span>
+          <div v-if="post.image != null" >
+                <img class="preview post-image" height="268" width="280" :src="post.image" />
+          </div>
           <p>{{ fullPost.content }}</p>
           <ul>
             <li><a>comments {{ fullPost.comments }}</a></li>

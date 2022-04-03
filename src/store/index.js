@@ -131,9 +131,14 @@ const store = new createStore({
         });
       dispatch("fetchUserProfile", user);
     },
+    // to do, add catch error to this function and all others.
+    // also add delete post... lol
+    
     async createPost({ state, commit }, post) {
+      console.log(post.image);
       await fb.postsCollection.add({
         createdOn: new Date(),
+        image: post.image,
         content: post.content,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
