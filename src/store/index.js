@@ -3,6 +3,9 @@ import * as fb from "../firebase";
 import { provider } from "../firebase";
 import router from "../router/index";
 import firebase from "firebase/compat/app";
+import { doc, setDoc, addDoc, set } from "firebase/firestore"; 
+
+
 
 // realtime firebase connection
 fb.postsCollection.orderBy("createdOn", "desc").onSnapshot((snapshot) => {
@@ -29,13 +32,23 @@ const store = new createStore({
       state.userProfile = val;
     },
     setPosts(state, val) {
+      val.forEach(p => {
+        if (fb.auth.currentUser.uid == p.userId) {
+          p.editable = true;
+        }
+        else {
+          p.editable = false;
+        }
+      });
+
       state.posts = val;
+      
     },
   },
   actions: {
     async signInWithGoogle({ commit }) {
       var userObj = { name: null, title: null };
-      // smmmign-in with google popup
+      // sign-in with google popup
       firebase
         .auth()
         .signInWithPopup(provider)
@@ -131,19 +144,39 @@ const store = new createStore({
         });
       dispatch("fetchUserProfile", user);
     },
+
+    // new post
     async createPost({ state, commit }, post) {
-      await fb.postsCollection.add({
+      await setDoc(doc(fb.postsCollection),{
         createdOn: new Date(),
+        image: post.image,
         content: post.content,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
         comments: 0,
         likes: 0,
+      }).then((data) => {
+        console.log(data + "There was an erro creating the post.");
       });
     },
+    // update post
+    async updatePost({ state, commit }, post) {
+      await setDoc(doc(fb.postsCollection, post.id),{
+        createdOn: new Date(),
+        image: post.image,
+        content: post.content,
+        userId: fb.auth.currentUser.uid,
+        userName: state.userProfile.name,
+        comments: 0,
+        likes: 0,
+      }).then((data) => {
+        console.log(data + "There was an erro updating the post.");
+      });
+    },
+
     async likePost({ commit }, post) {
       const userId = fb.auth.currentUser.uid;
-      const docId = `${userId}_${post.id}`;
+      const docId = userId + "_" + post.id;
 
       // check if user has liked post
       const doc = await fb.likesCollection.doc(docId).get();
@@ -151,7 +184,7 @@ const store = new createStore({
         return;
       }
 
-      // create post
+      // create like for the post, from this user
       await fb.likesCollection.doc(docId).set({
         postId: post.id,
         userId: userId,

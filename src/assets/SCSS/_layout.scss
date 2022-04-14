@@ -194,7 +194,7 @@ header {
       }
   
       .button {
-        margin-top: 1rem;
+        margin-top: 1em;
         width: 100%;
         z-index: 5;
         border-radius: 0 0 3px 3px;
@@ -386,3 +386,12 @@ header {
       margin-top: 2rem;
     }
   }
+
+  .upload-image-container {
+    margin-bottom: 1.3em;
+  }
+
+
+.edit-icon:hover {
+  cursor: pointer;
+}
