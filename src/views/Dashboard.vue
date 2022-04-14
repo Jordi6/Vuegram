@@ -12,16 +12,18 @@
           <div v-if="showUploadImage == true" class="create-post">
             <p>upload a photo</p>
             <div class="upload-image-container">
-              <button @click="choosePhoto" class="button button--upload-btn">choose photo</button>
+              <button @click="choosePhoto" class="button button--upload-btn">
+                choose photo
+              </button>
               <input
                 type="file"
                 ref="input1"
                 style="display: none"
                 @change="preivewImage"
                 accept="image/*"
-             />
+              />
               <div v-if="imageData != null">
-                <br>
+                <br />
                 <img class="preview" height="268" width="310" :src="img1" />
               </div>
             </div>
@@ -30,43 +32,42 @@
           <div v-else class="create-post">
             <p>create a post</p>
             <div class="upload-image-container">
-              <button @click="showUploadImageComp" class="button">upload an image</button>
+              <button @click="showUploadImageComp" class="button">
+                upload an image
+              </button>
             </div>
           </div>
 
           <div class="create-post">
-              <form @submit.prevent>
-                  <textarea v-model.trim="post1.content"
-                  ></textarea>
-                  <button
-                    @click="createPost()"
-                    :disabled="post1.content === ''"
-                    class="button"
-                  >
-                    post
-                  </button>
-                  <template v-if="showDelete == true">
-                    <button
-                      @click="deletePost()"
-                      class="button"
-                    >delete</button>
-                    </template>
-                      <button                      
-                      @click="reset" 
-                      class="button"
-                      >cancel
-                      </button>
-                </form>
+            <form @submit.prevent>
+              <textarea v-model.trim="post1.content"></textarea>
+              <button
+                @click="createPost()"
+                :disabled="post1.content === ''"
+                class="button"
+              >
+                post
+              </button>
+              <template v-if="showDelete == true">
+                <button @click="deletePost()" class="button">delete</button>
+              </template>
+              <button @click="reset" class="button">cancel</button>
+            </form>
           </div>
         </div>
       </div>
       <div class="col2">
-        <div v-if="posts.length" >
+        <div v-if="posts.length">
           <div v-for="post in posts" :key="post.id" class="post">
             <h5>{{ post.userName }}</h5>
             <span>{{ formatDate(post.createdOn) }}</span>
-            <div v-if="post.image != null" >
-                <img class="preview post-image" height="268" width="310" :src="post.image" />
+            <div v-if="post.image != null">
+              <img
+                class="preview post-image"
+                height="268"
+                width="310"
+                :src="post.image"
+              />
             </div>
             <p>{{ trimLength(post.content) }}</p>
             <ul>
@@ -76,16 +77,20 @@
                 >
               </li>
               <li>
-                <a @click="likePost(post.id, post.likes)">likes {{ post.likes }}</a>
+                <a @click="likePost(post.id, post.likes)"
+                  >likes {{ post.likes }}</a
+                >
               </li>
               <li><a @click="viewPost(post)">view full post</a></li>
               <li>
-                <div  v-if="post.editable == true">
-                <font-awesome-icon @click="editClick(post)" class="edit-icon" icon="pen-to-square" />
-              </div>
+                <div v-if="post.editable == true">
+                  <font-awesome-icon
+                    @click="editClick(post)"
+                    class="edit-icon"
+                    icon="pen-to-square"
+                  />
+                </div>
               </li>
-              
-
             </ul>
           </div>
         </div>
@@ -95,10 +100,10 @@
       </div>
     </section>
 
-  <!-- full post modal -->
-  <transition name="fade">
-    <v-modal v-model="show1"></v-modal>
-  </transition>
+    <!-- full post modal -->
+    <transition name="fade">
+      <v-modal v-model="show1"></v-modal>
+    </transition>
   </div>
 </template>
 
@@ -106,15 +111,12 @@
 import { mapState } from "vuex";
 import moment from "moment";
 import CommentModal from "@/components/CommentModal";
-import FullPostModal from '@/components/FullPostModal';
+import FullPostModal from "@/components/FullPostModal";
 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, deleteDoc } from "firebase/firestore";
 import { storage } from "../firebase.js";
 import * as fb from "../firebase";
-
-
-
 
 export default {
   data() {
@@ -129,7 +131,7 @@ export default {
       show1: true,
       showPostModal: false,
       selectedPost: {},
-      fullPost: {}, 
+      fullPost: {},
       postComments: [],
 
       showUploadImage: false,
@@ -140,10 +142,8 @@ export default {
   },
   computed: {
     ...mapState(["userProfile", "posts"]),
-    
   },
   methods: {
-
     deletePost() {
       deleteDoc(doc(fb.postsCollection, this.post1.id));
       this.reset();
@@ -154,11 +154,10 @@ export default {
       const post_UserId = post.userId;
 
       if (userId == post_UserId) {
-        this.showDelete = true;        
+        this.showDelete = true;
         this.post1.content = post.content;
         this.post1.id = post.id;
       }
-
     },
 
     choosePhoto() {
@@ -181,7 +180,8 @@ export default {
         "state_changed",
         (snapshot) => {
           // Get task progress, including the number of bytes uploaded and the total to be updated
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -224,7 +224,7 @@ export default {
     reset() {
       this.showUploadImage = false;
       this.uploadvalue = 0;
-      this.img1 = '';
+      this.img1 = "";
       this.imageData = null;
       this.post1.content = "";
       this.post1.image = "";
@@ -233,16 +233,14 @@ export default {
     },
 
     createPost() {
-
-      if (this.post1.image == '') {
+      if (this.post1.image == "") {
         this.post1.image = null;
       }
 
       if (this.post1.id != "") {
         // existing post
         this.$store.dispatch("updatePost", this.post1);
-      }
-      else {
+      } else {
         // new post
         this.$store.dispatch("createPost", this.post1);
       }
@@ -276,7 +274,7 @@ export default {
       }
     },
     likePost(id, likesCount) {
-      this.$store.dispatch('likePost', { id, likesCount })
+      this.$store.dispatch("likePost", { id, likesCount });
     },
     viewPost(post) {
       this.$vfm.show({

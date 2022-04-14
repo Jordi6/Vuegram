@@ -27,14 +27,6 @@ const routes = [
     },
   },
   {
-    path: '/test',
-    name: 'test',
-    component: () => import("../views/Test.vue"),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
     path: '/:pathMatch(.*)*',
     name: '404 Not Found',
     component: () => import("../components/404.vue"),
