@@ -9,12 +9,18 @@
     },
     "dependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 967dadd (adding images to posts. also can delete and edit posts.)
         "@fortawesome/fontawesome-svg-core": "^6.1.1",
         "@fortawesome/free-regular-svg-icons": "^6.1.1",
         "@fortawesome/free-solid-svg-icons": "^6.1.1",
         "@fortawesome/vue-fontawesome": "^3.0.0-5",
+<<<<<<< HEAD
 =======
 >>>>>>> 9a16b57 (image file chosen, previewed and uploaded to the cloud (firestore))
+=======
+>>>>>>> 967dadd (adding images to posts. also can delete and edit posts.)
         "bootstrap": "^5.0.0",
         "core-js": "^3.6.5",
         "firebase": "^9.6.10",
