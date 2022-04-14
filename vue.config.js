@@ -1,7 +1,5 @@
 
 
-// workaround for local host not working on port 8080.
-
 module.exports = {
     devServer: {
         // other config

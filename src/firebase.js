@@ -2,6 +2,8 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 
+import { getStorage } from "firebase/storage";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDi-QvgQCd8QdF9wbnMuvV-V6H35sBDGKU",
@@ -13,7 +15,11 @@ const firebaseConfig = {
   measurementId: "G-91420S3DVR",
 };
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+// image test storage
+const storage = getStorage(firebaseApp);
 
 // utils
 const db = firebase.firestore();
@@ -24,6 +30,7 @@ const userCollection = db.collection("users");
 const postsCollection = db.collection("posts");
 const commentsCollection = db.collection("comments");
 const likesCollection = db.collection("likes");
+
 
 // firebase google auth
 var provider = new firebase.auth.GoogleAuthProvider();
@@ -37,4 +44,5 @@ export {
   commentsCollection,
   likesCollection,
   provider,
+  storage,
 };
