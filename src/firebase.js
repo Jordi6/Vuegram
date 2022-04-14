@@ -31,9 +31,6 @@ const postsCollection = db.collection("posts");
 const commentsCollection = db.collection("comments");
 const likesCollection = db.collection("likes");
 
-// temp test image collection
-const imageCollection = db.collection("images");
-
 
 // firebase google auth
 var provider = new firebase.auth.GoogleAuthProvider();
@@ -48,5 +45,4 @@ export {
   likesCollection,
   provider,
   storage,
-  imageCollection,
 };
