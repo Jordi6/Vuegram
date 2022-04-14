@@ -20,7 +20,6 @@
                 @change="preivewImage"
                 accept="image/*"
              />
-              <button @click="cancel" class="button">cancel</button>
               <div v-if="imageData != null">
                 <br>
                 <img class="preview" height="268" width="310" :src="img1" />
@@ -37,20 +36,32 @@
 
           <div class="create-post">
               <form @submit.prevent>
-                  <textarea v-model.trim="post.content"></textarea>
+                  <textarea v-model.trim="post1.content"
+                  ></textarea>
                   <button
                     @click="createPost()"
-                    :disabled="post.content === ''"
+                    :disabled="post1.content === ''"
                     class="button"
                   >
                     post
                   </button>
+                  <template v-if="showDelete == true">
+                    <button
+                      @click="deletePost()"
+                      class="button"
+                    >delete</button>
+                    </template>
+                      <button                      
+                      @click="reset" 
+                      class="button"
+                      >cancel
+                      </button>
                 </form>
           </div>
         </div>
       </div>
       <div class="col2">
-        <div v-if="posts.length">
+        <div v-if="posts.length" >
           <div v-for="post in posts" :key="post.id" class="post">
             <h5>{{ post.userName }}</h5>
             <span>{{ formatDate(post.createdOn) }}</span>
@@ -68,6 +79,13 @@
                 <a @click="likePost(post.id, post.likes)">likes {{ post.likes }}</a>
               </li>
               <li><a @click="viewPost(post)">view full post</a></li>
+              <li>
+                <div  v-if="post.editable == true">
+                <font-awesome-icon @click="editClick(post)" class="edit-icon" icon="pen-to-square" />
+              </div>
+              </li>
+              
+
             </ul>
           </div>
         </div>
@@ -91,17 +109,22 @@ import CommentModal from "@/components/CommentModal";
 import FullPostModal from '@/components/FullPostModal';
 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, deleteDoc } from "firebase/firestore";
 import { storage } from "../firebase.js";
+import * as fb from "../firebase";
+
 
 
 
 export default {
   data() {
     return {
-      post: {
+      post1: {
         content: "",
         image: "",
+        id: "",
       },
+
       show: false,
       show1: true,
       showPostModal: false,
@@ -112,22 +135,41 @@ export default {
       showUploadImage: false,
       img1: "",
       imageData: null,
+      showDelete: false,
     };
   },
   computed: {
     ...mapState(["userProfile", "posts"]),
+    
   },
   methods: {
+
+    deletePost() {
+      deleteDoc(doc(fb.postsCollection, this.post1.id));
+      this.reset();
+    },
+
+    editClick(post) {
+      const userId = fb.auth.currentUser.uid;
+      const post_UserId = post.userId;
+
+      if (userId == post_UserId) {
+        this.showDelete = true;        
+        this.post1.content = post.content;
+        this.post1.id = post.id;
+      }
+
+    },
+
     choosePhoto() {
       this.$refs.input1.click();
     },
     preivewImage(event) {
       this.uploadvalue = 0;
-      // this.img1 = null;
       this.imageData = event.target.files[0];
       this.onUpload();
     },
-    // to do, add remove functionality to image preview.
+
     onUpload() {
       this.img1 = null;
 
@@ -139,9 +181,7 @@ export default {
         "state_changed",
         (snapshot) => {
           // Get task progress, including the number of bytes uploaded and the total to be updated
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + " % done");
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -161,9 +201,6 @@ export default {
               // User canceled the upload;
               alert("User canceled the upload");
               break;
-
-            // ..
-
             case "storage/unknown":
               // Unknown error occurred, inspet error.serverResponse
               alert("User canceled the upload");
@@ -173,8 +210,7 @@ export default {
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            // console.log("File available at", downloadURL);
-            this.post.image = downloadURL;
+            this.post1.image = downloadURL;
             this.img1 = downloadURL;
           });
         }
@@ -182,28 +218,40 @@ export default {
     },
 
     showUploadImageComp() {
-      this.showUploadImage = true;      
+      this.showUploadImage = true;
     },
-    cancel() {
+
+    reset() {
       this.showUploadImage = false;
       this.uploadvalue = 0;
-      this.img1 = ''
-      this.imageData = null
-
+      this.img1 = '';
+      this.imageData = null;
+      this.post1.content = "";
+      this.post1.image = "";
+      this.post1.id = "";
+      this.showDelete = false;
     },
+
     createPost() {
-      // send the payload as a full object?
-      this.$store.dispatch("createPost", { 
-        content: this.post.content,
-        image: this.post.image 
-        });
-      this.post.content = "";
+
+      if (this.post1.image == '') {
+        this.post1.image = null;
+      }
+
+      if (this.post1.id != "") {
+        // existing post
+        this.$store.dispatch("updatePost", this.post1);
+      }
+      else {
+        // new post
+        this.$store.dispatch("createPost", this.post1);
+      }
+      this.reset();
     },
     formatDate(val) {
       if (!val) {
         return "-";
       }
-
       let date = val.toDate();
       return moment(date).fromNow();
     },
