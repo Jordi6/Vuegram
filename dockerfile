@@ -10,6 +10,9 @@ COPY package*.json ./
 # install project dependencies
 RUN npm install
 
+#firebase tools
+RUN npm install -g firebase-tools
+
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY ./ .
 
@@ -21,10 +24,7 @@ RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-<<<<<<< HEAD
 
-=======
->>>>>>> ef33c87a23bda866b774fab771d7d8f78c61278d
 RUN mkdir /app
 
 COPY --from=build-stage /app/dist /app
