@@ -7,23 +7,8 @@ import { doc, setDoc, addDoc, set } from "firebase/firestore";
 
 
 
-// realtime firebase connection
-fb.postsCollection.orderBy("createdOn", "desc").onSnapshot((snapshot) => {
-  let postsArray = [];
-
-  snapshot.forEach((doc) => {
-    let post = doc.data();
-    post.id = doc.id;
-    postsArray.push(post);
-  });
-
-  store.commit("setPosts", postsArray);
-});
-
-
 const store = new createStore({
   state: {
-    // userProfile = {name: , title: };
     userProfile: {},
     posts: [],
   },
@@ -32,17 +17,7 @@ const store = new createStore({
       state.userProfile = val;
     },
     setPosts(state, val) {
-      val.forEach(p => {
-        if (fb.auth.currentUser.uid == p.userId) {
-          p.editable = true;
-        }
-        else {
-          p.editable = false;
-        }
-      });
-
       state.posts = val;
-      
     },
   },
   actions: {
@@ -108,6 +83,31 @@ const store = new createStore({
         });
       dispatch("fetchUserProfile", user);
     },
+    
+    // fetch posts and call function to set posts in state
+    async fetchPosts({ commit }, user) {
+      fb.postsCollection.orderBy("createdOn", "desc").onSnapshot((snapshot) => {
+        let postsArray = [];
+
+        snapshot.forEach((doc) => {
+          let post = doc.data();
+          post.id = doc.id;
+          
+          // settting editable value
+          if (user.uid == post.userId) {
+            post.editable = true;
+          }
+          else {
+            post.editable = false;
+          }
+
+          postsArray.push(post);
+        });
+
+        store.commit("setPosts", postsArray);
+      });
+    },
+
     // fetch user profile and set in state
     async fetchUserProfile({ commit }, user) {
       const userRef = fb.userCollection.doc(user.uid);
