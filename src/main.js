@@ -22,22 +22,22 @@ let app
 
   auth.onAuthStateChanged((user) => {
     if (!app) {
-      app = createApp(App)
+      app = createApp(App);
       app
-      .component("font-awesome-icon", FontAwesomeIcon)
       .use(store)
       .use(router)
-      app.use(store).use(router).use(VueFinalModal(), {
+      .component("font-awesome-icon", FontAwesomeIcon)
+      .use(VueFinalModal(), {
         componentName: 'VueFinalModal',
         key: '$vfm',    
         dynamicContainerName: 'ModalsContainer'
       })
       .mount('#app')
     }
+    
     if (user) {
-      store.dispatch('fetchUserProfile', user)
+      store.dispatch('fetchUserProfile', user);
+      store.dispatch('fetchPosts', user);
     }
-  })
-  
 
-  
+  });
