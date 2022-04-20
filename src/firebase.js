@@ -6,14 +6,14 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDi-QvgQCd8QdF9wbnMuvV-V6H35sBDGKU",
-  authDomain: "vuegram-c469c.firebaseapp.com",
-  projectId: "vuegram-c469c",
-  storageBucket: "vuegram-c469c.appspot.com",
-  messagingSenderId: "22037694890",
-  appId: "1:22037694890:web:e6920b2ed1f67dcddbc3d3",
-  measurementId: "G-91420S3DVR",
-};
+    apiKey: "AIzaSyDi-QvgQCd8QdF9wbnMuvV-V6H35sBDGKU",
+    authDomain: "vuegram-c469c.firebaseapp.com",
+    projectId: "vuegram-c469c",
+    storageBucket: "vuegram-c469c.appspot.com",
+    messagingSenderId: "22037694890",
+    appId: "1:22037694890:web:e6920b2ed1f67dcddbc3d3",
+    measurementId: "G-91420S3DVR"
+  }
 
 // firebase.initializeApp(firebaseConfig);
 const firebaseApp = firebase.initializeApp(firebaseConfig);
