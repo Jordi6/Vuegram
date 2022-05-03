@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  vue-nginx:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: vue-nginx:1.1
+    container_name:  CVN_DC1
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - webroot:/app
+      - dhparam:/etc/ssl/certs
+    networks:
+    - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - webroot:/app
+    depends_on:
+      - vue-nginx
+    command: certonly --webroot --webroot-path=/app --email jordybecerril@gmail.com --agree-tos --no-eff-email --force-renewal -d vuegram.design -d www.vuegram.design
+
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  webroot:
+    driver: local
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/stark/vue_workspace/vuegram/dhparam/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
