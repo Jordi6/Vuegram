@@ -1,5 +1,5 @@
 # Vuegram
 
-fullstack web-app wirtten in vue
+fullstack web-app wirtten in Vue 3
 
 https://vuegram-sandy.vercel.app/
