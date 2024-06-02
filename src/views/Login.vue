@@ -6,9 +6,7 @@
         <h1>Vuegram</h1>
         <p>
           Welcome to the
-          <a href="https://www.jordibecerril.com/" target="_blank"
-            >Jordi B.E.</a
-          >
+          <a href="https://www.jordibecerril.com/" target="_blank">Jordi B.E.</a>
           social media web app project, written in Vue.js and Firebase.
         </p>
       </div>
@@ -40,29 +38,17 @@
           </div>
           <br />
           <br />
-          <button @click="loginWithGoogle()" class="button">
-            Log in with Google
-          </button>
+          <button @click="loginWithGoogle()" class="button">Log in with Google</button>
         </form>
         <form v-else @submit.prevent>
           <h1>Get Started</h1>
           <div>
             <label for="name">Name</label>
-            <input
-              v-model.trim="signupForm.name"
-              type="text"
-              placeholder="Vuegram"
-              id="name"
-            />
+            <input v-model.trim="signupForm.name" type="text" placeholder="Vuegram" id="name" />
           </div>
           <div>
             <label for="title">Title</label>
-            <input
-              v-model.trim="signupForm.title"
-              type="text"
-              placeholder="Company"
-              id="title"
-            />
+            <input v-model.trim="signupForm.title" type="text" placeholder="Company" id="title" />
           </div>
           <div>
             <label for="email2">Email</label>
@@ -93,58 +79,57 @@
 </template>
 
 <script>
-import VModal from "@/components/PasswordReset";
+import VModal from '/src/components/CommentModal.vue'
 
 export default {
   data() {
     return {
       loginForm: {
-        email: "",
-        password: "",
+        email: '',
+        password: ''
       },
       signupForm: {
-        name: "",
-        title: "",
-        email: "",
-        password: "",
+        name: '',
+        title: '',
+        email: '',
+        password: ''
       },
       showLoginForm: true,
-      show: false,
-    };
+      show: false
+    }
   },
   methods: {
     loginWithGoogle() {
       // call signInWithPopup in store. or index.js
-      this.$store.dispatch("signInWithGoogle")
-
+      this.$store.dispatch('signInWithGoogle')
     },
     login() {
-      this.$store.dispatch("login", {
+      this.$store.dispatch('login', {
         email: this.loginForm.email,
-        password: this.loginForm.password,
-      });
+        password: this.loginForm.password
+      })
     },
     signup() {
-      this.$store.dispatch("signup", {
+      this.$store.dispatch('signup', {
         email: this.signupForm.email,
         password: this.signupForm.password,
         name: this.signupForm.name,
-        title: this.signupForm.title,
-      });
+        title: this.signupForm.title
+      })
     },
     toggleForm() {
-      this.showLoginForm = !this.showLoginForm;
+      this.showLoginForm = !this.showLoginForm
     },
     dynamic() {
       this.$vfm.show({
         component: VModal,
         bind: {
-          name: "VDynamicAdvacedModal",
-        },
-      });
-    },
-  },
-};
+          name: 'VDynamicAdvacedModal'
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss"></style>

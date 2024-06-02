@@ -172,6 +172,9 @@ header {
     }
   
     .profile {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+
       background: $white;
       padding: 2rem;
   
@@ -189,15 +192,18 @@ header {
       }
   
       textarea {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+
         height: 200px;
         margin: 0;
       }
   
       .button {
+        border-radius: 4px;
         margin-top: 1em;
         width: 100%;
         z-index: 5;
-        border-radius: 0 0 3px 3px;
       }
     }
   
@@ -223,7 +229,12 @@ header {
         color: darken($light, 25%);
       }
     }
-  
+    
+    .post:first-of-type {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
     .post {
       border: 1px solid #e6ecf0;
       border-bottom: 0;
@@ -242,7 +253,7 @@ header {
       h5 {
         margin: 0 0 0.5rem;
       }
-  
+      
       span {
         display: block;
         font-style: italic;
@@ -250,8 +261,10 @@ header {
         margin-bottom: 0.5rem;
         color: darken($light, 25%);
       }
-  
+      
+      // .post-content
       p {
+        padding-top: 1em;
         margin: 0;
       }
   
@@ -274,7 +287,7 @@ header {
       text-align: center;
       padding: 100px 1rem;
     }
-   
+
   }
 
 

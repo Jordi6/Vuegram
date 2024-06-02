@@ -1,8 +1,6 @@
-import Vue from 'vue'
-import VueRouter, { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import { auth } from '../firebase'
-
 
 const routes = [
   {
@@ -16,35 +14,31 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import("../views/Login.vue"),
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/settings',
     name: 'settings',
-    component: () => import("../views/Settings.vue"),
+    component: () => import('../views/Settings.vue'),
     meta: {
       requiresAuth: true
-    },
+    }
   },
   {
     path: '/:pathMatch(.*)*',
     name: '404 Not Found',
-    component: () => import("../components/404.vue"),
+    component: () => import('../components/404.vue')
   }
 ]
 
 const router = new createRouter({
-  history: createWebHistory(),
-  mode: 'history', 
+  history: createWebHistory(import.meta.env.BASE_URL),
+  mode: 'history',
   routes
 })
 
-
-
-
-
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  const requiresAuth = to.matched.some((x) => x.meta.requiresAuth)
 
   if (requiresAuth && !auth.currentUser) {
     next('/login')
@@ -52,7 +46,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
-
 
 export default router

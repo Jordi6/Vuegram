@@ -1,41 +1,39 @@
-import { createStore } from "vuex";
-import * as fb from "../firebase";
-import { provider } from "../firebase";
-import router from "../router/index";
-import firebase from "firebase/compat/app";
-import { doc, setDoc, addDoc, set } from "firebase/firestore"; 
-
-
+import { createStore } from 'vuex'
+import * as fb from '../firebase'
+import { provider } from '../firebase'
+import router from '../router/index'
+import firebase from 'firebase/compat/app'
+import { doc, setDoc } from 'firebase/firestore'
 
 const store = new createStore({
   state: {
     userProfile: {},
-    posts: [],
+    posts: []
   },
   mutations: {
     setUserProfile(state, val) {
-      state.userProfile = val;
+      state.userProfile = val
     },
     setPosts(state, val) {
-      state.posts = val;
-    },
+      state.posts = val
+    }
   },
   actions: {
     async signInWithGoogle({ commit }) {
-      var userObj = { name: null, title: null };
+      var userObj = { name: null, title: null }
       // sign-in with google popup
       firebase
         .auth()
         .signInWithPopup(provider)
         .then((result) => {
           /** @type {firebase.auth.OAuthCredential} */
-          var credential = result.credential;
+          var credential = result.credential
           // var token = credential.accessToken;
           // The signed-in user info.
-          var user = result.user;
+          var user = result.user
 
-          userObj.name = user.displayName;
-          var docRef = fb.userCollection.doc(user.uid);
+          userObj.name = user.displayName
+          var docRef = fb.userCollection.doc(user.uid)
 
           docRef
             .get()
@@ -43,189 +41,184 @@ const store = new createStore({
               if (!doc.exists) {
                 fb.userCollection.doc(user.uid).set({
                   name: userObj.name,
-                  title: userObj.title,
-                });
+                  title: userObj.title
+                })
               }
-              this.dispatch("fetchUserProfile", user);
+              this.dispatch('fetchUserProfile', user)
             })
             .catch((error) => {
-              console.log("Error getting document:", error);
-            });
+              console.log('Error getting document:', error)
+            })
         })
         .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
+          var errorCode = error.code
+          var errorMessage = error.message
           // The email of the user's account used.
-          var email = error.email;
+          var email = error.email
           // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          alert("Error logging in with google:" + errorCode);
-          alert("Error message:" + errorMessage);
-        });
+          var credential = error.credential
+          alert('Error logging in with google:' + errorCode)
+          alert('Error message:' + errorMessage)
+        })
     },
     // logout user
     async logout({ commit }) {
-      await fb.auth.signOut();
+      await fb.auth.signOut()
 
-      commit("setUserProfile", {});
-      router.push("/login");
+      commit('setUserProfile', {})
+      router.push('/login')
     },
     // log in user
     async login({ dispatch }, form) {
-      var user = {};
+      var user = {}
       await fb.auth
         .signInWithEmailAndPassword(form.email, form.password)
         .then((data) => {
-          user = data.user;
+          user = data.user
         })
         .catch((err) => {
-          alert(err.message);
-        });
-      dispatch("fetchUserProfile", user);
+          alert(err.message)
+        })
+      dispatch('fetchUserProfile', user)
     },
-    
+
     // fetch posts and call function to set posts in state
     async fetchPosts({ commit }, user) {
-      fb.postsCollection.orderBy("createdOn", "desc").onSnapshot((snapshot) => {
-        let postsArray = [];
+      fb.postsCollection.orderBy('createdOn', 'desc').onSnapshot((snapshot) => {
+        let postsArray = []
 
         snapshot.forEach((doc) => {
-          let post = doc.data();
-          post.id = doc.id;
-          
+          let post = doc.data()
+          post.id = doc.id
+
           // settting editable value
           if (user.uid == post.userId) {
-            post.editable = true;
-          }
-          else {
-            post.editable = false;
+            post.editable = true
+          } else {
+            post.editable = false
           }
 
-          postsArray.push(post);
-        });
+          postsArray.push(post)
+        })
 
-        store.commit("setPosts", postsArray);
-      });
+        store.commit('setPosts', postsArray)
+      })
     },
 
     // fetch user profile and set in state
     async fetchUserProfile({ commit }, user) {
-      const userRef = fb.userCollection.doc(user.uid);
-      const doc = await userRef.get();
+      const userRef = fb.userCollection.doc(user.uid)
+      const doc = await userRef.get()
 
       // getting name and title obj from firestore db.
       // then calling set user profile to set in store state
-      commit("setUserProfile", doc.data());
+      commit('setUserProfile', doc.data())
 
-      if (router.currentRoute.value.path == "/login") {
-        router.push("/");
+      if (router.currentRoute.value.path == '/login') {
+        router.push('/')
       }
     },
     async signup({ dispatch }, form) {
-      var user = {};
+      var user = {}
       await fb.auth
         .createUserWithEmailAndPassword(form.email, form.password)
         .then((data) => {
           // signed in
-          const userId = data.user.uid;
-          user = data.user;
+          const userId = data.user.uid
+          user = data.user
 
           // create user profile object in userCollections
           fb.userCollection.doc(userId).set({
             name: form.name,
-            title: form.title,
-          });
+            title: form.title
+          })
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          const errorCode = error.code
+          const errorMessage = error.message
 
-          alert(errorCode + ", " + errorMessage);
-        });
-      dispatch("fetchUserProfile", user);
+          alert(errorCode + ', ' + errorMessage)
+        })
+      dispatch('fetchUserProfile', user)
     },
 
     // new post
     async createPost({ state, commit }, post) {
-      await setDoc(doc(fb.postsCollection),{
+      await setDoc(doc(fb.postsCollection), {
         createdOn: new Date(),
         image: post.image,
         content: post.content,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
         comments: 0,
-        likes: 0,
+        likes: 0
       }).then((data) => {
-        console.log(data + "There was an erro creating the post.");
-      });
+        console.log(data + 'There was an erro creating the post.')
+      })
     },
     // update post
     async updatePost({ state, commit }, post) {
-      await setDoc(doc(fb.postsCollection, post.id),{
+      await setDoc(doc(fb.postsCollection, post.id), {
         createdOn: new Date(),
         image: post.image,
         content: post.content,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
         comments: 0,
-        likes: 0,
+        likes: 0
       }).then((data) => {
-        console.log(data + "There was an erro updating the post.");
-      });
+        console.log(data + 'There was an erro updating the post.')
+      })
     },
 
     async likePost({ commit }, post) {
-      const userId = fb.auth.currentUser.uid;
-      const docId = userId + "_" + post.id;
+      const userId = fb.auth.currentUser.uid
+      const docId = userId + '_' + post.id
 
       // check if user has liked post
-      const doc = await fb.likesCollection.doc(docId).get();
+      const doc = await fb.likesCollection.doc(docId).get()
       if (doc.exists) {
-        return;
+        return
       }
 
       // create like for the post, from this user
       await fb.likesCollection.doc(docId).set({
         postId: post.id,
-        userId: userId,
-      });
+        userId: userId
+      })
 
       // update post likes count
       fb.postsCollection.doc(post.id).update({
-        likes: post.likesCount + 1,
-      });
+        likes: post.likesCount + 1
+      })
     },
     async updateProfile({ dispatch }, user) {
-      const userId = fb.auth.currentUser.uid;
+      const userId = fb.auth.currentUser.uid
       // update user object
       const userRef = await fb.userCollection.doc(userId).update({
         name: user.name,
-        title: user.title,
-      });
+        title: user.title
+      })
 
-      dispatch("fetchUserProfile", { uid: userId });
+      dispatch('fetchUserProfile', { uid: userId })
 
       // update all posts by user
-      const postDocs = await fb.postsCollection
-        .where("userId", "==", userId)
-        .get();
+      const postDocs = await fb.postsCollection.where('userId', '==', userId).get()
       postDocs.forEach((doc) => {
         fb.postsCollection.doc(doc.id).update({
-          userName: user.name,
-        });
-      });
+          userName: user.name
+        })
+      })
 
       // update all coments by user
-      const commentDocs = await fb.commentsCollection
-        .where("userId", "==", userId)
-        .get();
+      const commentDocs = await fb.commentsCollection.where('userId', '==', userId).get()
       commentDocs.forEach((doc) => {
         fb.commentsCollection.doc(doc.id).update({
-          userName: user.name,
-        });
-      });
-    },
-  },
-});
+          userName: user.name
+        })
+      })
+    }
+  }
+})
 
-export default store;
+export default store
